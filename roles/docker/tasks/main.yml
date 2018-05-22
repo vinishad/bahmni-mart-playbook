@@ -1,0 +1,30 @@
+
+- name: Check if docker needs an update
+  yum:
+    list: docker-io
+  register: docker_info
+  ignore_errors: true
+
+- name: Uninstall docker
+  yum:
+    name: docker-io
+    state: absent
+  when: docker_info.results|length != 0 and docker_info.results[0].version != "{{ docker_version }}"
+
+- name: Install docker
+  yum:
+    name: docker-io
+    state: present
+
+- name: Install docker-compose
+  get_url:
+    url: "{{ docker_compose_url }}"
+    dest: /usr/bin/docker-compose
+    mode: 0755
+
+- name: Start docker and enabled at boot
+  service:
+    name: docker
+    enabled: yes
+    state: started
+

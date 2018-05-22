@@ -1,0 +1,14 @@
+dataflow-server:
+    image: {{ dataflow_server_image }}
+    container_name: dataflow-server
+    volumes:
+      - /opt/bahmni-mart:/opt/bahmni-mart:rw
+      - /var/www/bahmni_config:/var/www/bahmni_config:rw
+      - /var/www/implementation_config:/var/www/implementation_config:rw
+      - /var/log:/var/log:rw
+    ports:
+      - "{{ dataflow_server_port }}:9393"
+    environment:
+      - spring.dataflow.embedded.database.enabled=false
+      - spring.config.location={{ bahmni_mart_properties_location }}
+      - spring.profiles.active=docker

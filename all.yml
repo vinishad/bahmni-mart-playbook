@@ -1,0 +1,15 @@
+# The role postgres is copy/pasted from bahmni-playbooks.
+- hosts: bahmni-mart-db
+  become: yes
+  roles:
+    - { role: postgres, postgres_user: analytics }
+
+- hosts: bahmni-mart
+  become: yes
+  roles:
+    - { role: bahmni-mart }
+
+- hosts: bahmni-mart-scdf
+  become: yes
+  roles:
+    - { role: bahmni-mart-scdf }

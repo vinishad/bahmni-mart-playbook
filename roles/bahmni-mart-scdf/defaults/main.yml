@@ -1,0 +1,20 @@
+default_docker_ip: "172.17.42.1"
+bahmni_user: bahmni
+bahmni_group: bahmni
+
+bahmni_mart_scdf_docker_compose_location: "/opt/bahmni-mart/docker-compose.yml"
+analytics_db_port: 5432
+openmrs_db_name: openmrs
+openmrs_db_username: openmrs-user
+openmrs_db_password: password
+openmrs_db_server: "{{ groups['bahmni-emr-db'][0] | default(default_docker_ip, true) }}"
+analytics_db_server: "{{ groups['bahmni-mart-db'][0] | default(default_docker_ip, true) }}"
+analytics_db_name: analytics
+analytics_db_user: analytics
+analytics_db_password: ''
+bahmni_mart_scdf_schema_name: bahmni_mart_scdf
+liquibase_changelog_path: "/opt/bahmni-mart/conf/liquibase.xml"
+
+dataflow_server_image: "springcloud/spring-cloud-dataflow-server-local:1.4.0.RELEASE"
+dataflow_server_port: 9393
+bahmni_mart_properties_location: "/opt/bahmni-mart/properties/"
