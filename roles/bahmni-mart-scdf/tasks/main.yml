@@ -31,19 +31,19 @@
 
 - name: Copy docker-compose file for bahmni-mart-scdf
   template:
-    src: docker-compose.yml.j2
-    dest: "{{ bahmni_mart_scdf_docker_compose_location }}"
-    mode: 644
-    owner: "{{ bahmni_user }}"
-    group: "{{ bahmni_group }}"
+    src=docker-compose.yml.j2
+    dest={{ bahmni_mart_scdf_docker_compose_location }}
+    mode=644
+    owner={{ bahmni_user }}
+    group={{ bahmni_group }}
 
 - name: Copy bahmni-mart properties
   template:
-    src: application.properties.j2
-    dest: /opt/bahmni-mart/properties/application-docker.properties
-    mode: 644
-    owner: "{{ bahmni_user }}"
-    group: "{{ bahmni_group }}"
+    src=application.properties.j2
+    dest=/opt/bahmni-mart/properties/application-docker.properties
+    mode=644
+    owner={{ bahmni_user }}
+    group={{ bahmni_group }}
 
 - name: Update postgres config
   include_role:
@@ -52,8 +52,12 @@
     app_server_group: bahmni_mart_scdf
     db_user: "{{ analytics_db_user }}"
     db_name: "{{ analytics_db_name }}"
-    host: "{{ analytics_db_server }}"
     postgres_version: 9.2
+    docker_ip: "{{ default_docker_ip }}"
+
+- name: Remove stopped containners
+  command: docker-compose -f {{ bahmni_mart_scdf_docker_compose_location }} rm
+  ignore_errors: true
 
 - name: Create bahmni-mart-scdf docker conatainer
   command: docker-compose -f {{ bahmni_mart_scdf_docker_compose_location }} up -d

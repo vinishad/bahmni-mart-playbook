@@ -6,10 +6,13 @@
     state: present
     block: |
       #{{app_server_group}}
+      {% for host in ansible_all_ipv4_addresses %}
       {% if host not in [False, 'localhost', '127.0.0.1'] %}
       host all postgres {{ host }}/32 trust
       host {{ db_name }} {{ db_user }} {{ host }}/32 trust #access to app server
       {% endif %}
+      {% endfor %}
+      host {{ db_name }} {{ db_user }} {{ docker_ip }}/16 trust #access through docker IP
 
 - name: Reload postgresql
   service:
