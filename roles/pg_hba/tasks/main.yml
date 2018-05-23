@@ -1,0 +1,17 @@
+- name: insert/update postgres config for bahmni_mart_scdf
+  blockinfile:
+    dest: /var/lib/pgsql/{{ postgres_version }}/data/pg_hba.conf
+    marker: "#<!-- {mark} ANSIBLE MANAGED BLOCK {{app_server_group}} -->"
+    insertafter: "{{ app_server_group }}"
+    state: present
+    block: |
+      #{{app_server_group}}
+      {% if host not in [False, 'localhost', '127.0.0.1'] %}
+      host all postgres {{ host }}/32 trust
+      host {{ db_name }} {{ db_user }} {{ host }}/32 trust #access to app server
+      {% endif %}
+
+- name: Reload postgresql
+  service:
+    name=postgresql-{{ postgres_version }}
+    state=reloaded

@@ -45,5 +45,15 @@
     owner: "{{ bahmni_user }}"
     group: "{{ bahmni_group }}"
 
+- name: Update postgres config
+  include_role:
+    name: pg_hba
+  vars:
+    app_server_group: bahmni_mart_scdf
+    db_user: "{{ analytics_db_user }}"
+    db_name: "{{ analytics_db_name }}"
+    host: "{{ analytics_db_server }}"
+    postgres_version: 9.2
+
 - name: Create bahmni-mart-scdf docker conatainer
   command: docker-compose -f {{ bahmni_mart_scdf_docker_compose_location }} up -d
