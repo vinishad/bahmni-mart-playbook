@@ -16,9 +16,13 @@
     name: docker-io
     state: present
 
+- name: Evaluate docker compose url
+  shell: "echo {{ docker_compose_url }}"
+  register: evaluated_docker_compose_url
+
 - name: Install docker-compose
   get_url:
-    url: "{{ docker_compose_url }}"
+    url: "{{ evaluated_docker_compose_url.stdout }}"
     dest: /usr/bin/docker-compose
     mode: 0755
 
