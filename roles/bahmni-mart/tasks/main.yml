@@ -24,3 +24,11 @@
   postgresql_db:
     name: "{{ analytics_db_name }}"
     owner: "{{ analytics_db_user }}"
+    
+- name: Create backup directory
+  file:
+    path: /data/analytics
+    mode: 0644
+    owner: "{{ bahmni_user }}"
+    group: "{{ bahmni_group }}"
+    state: directory

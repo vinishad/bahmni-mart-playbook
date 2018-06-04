@@ -8,6 +8,7 @@
   become: yes
   roles:
     - { role: bahmni-mart }
+    - { role: openssl }
 
 - hosts: bahmni-mart-scdf
   become: yes
