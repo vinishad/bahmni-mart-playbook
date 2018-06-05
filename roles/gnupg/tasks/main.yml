@@ -1,0 +1,6 @@
+
+- name: Install gnupg
+  yum:
+    name: gnupg
+    state: present
+
