@@ -12,8 +12,16 @@ localhost
 [bahmni-mart-scdf]
 localhost
 
+[metabase]
+localhost
+
+[metabase-db]
+localhost
+
 [local:children]
 bahmni-mart
 bahmni-mart-db
 bahmni-mart-scdf
 bahmni-emr-db
+metabase
+metabase-db

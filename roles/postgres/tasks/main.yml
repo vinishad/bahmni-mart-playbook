@@ -60,7 +60,7 @@
   file:
       path=/var/lib/pgsql/{{ postgres_version }}/data/recovery.conf
       state=absent
-  when: inventory_hostname in groups['bahmni-mart-db']
+  when: inventory_hostname in groups['bahmni-mart-db'] or inventory_hostname in groups['metabase-db']
   register: recovery_conf
 
 - block:
@@ -96,5 +96,5 @@
 - name: Create postgres user
   postgresql_user: name={{ postgres_user }} role_attr_flags=CREATEDB,NOCREATEROLE,SUPERUSER,REPLICATION
   sudo_user: postgres
-  when: postgres_user is defined and (inventory_hostname in groups['bahmni-mart-db'])
+  when: postgres_user is defined and (inventory_hostname in groups['bahmni-mart-db'] or inventory_hostname in groups['metabase-db'])
 # creating user only in master dbs. User creation will be replicated in slave.

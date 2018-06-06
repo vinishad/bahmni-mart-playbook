@@ -14,3 +14,9 @@
   become: yes
   roles:
     - { role: bahmni-mart-scdf }
+
+- hosts: metabase
+  become: yes
+  roles:
+    - { role: postgres, postgres_user: metabase }
+    - { role:  metabase }

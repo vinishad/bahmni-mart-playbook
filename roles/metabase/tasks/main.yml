@@ -1,0 +1,49 @@
+
+- name: Install and start docker
+  include_role:
+    name: docker
+
+- name: Set metabase_db_server variable
+  set_fact:
+    metabase_db_server: "{{ default_docker_ip }}"
+  when: metabase_db_server == 'localhost' or metabase_db_server == '127.0.0.1'
+
+- name: Copy docker-compose file for metabase
+  template:
+    src=docker-compose.yml.j2
+    dest={{ metabase_docker_compose_location }}
+    mode=644
+    owner={{ bahmni_user }}
+    group={{ bahmni_group }}
+
+- name: Create metabase DB
+  postgresql_db:
+    name: "{{ metabase_db_name }}"
+    owner: "{{ metabase_db_user }}"
+
+- name: Update postgres config
+  include_role:
+    name: pg_hba
+  vars:
+    app_server_group: metabase
+    db_user: "{{ metabase_db_user }}"
+    db_name: "{{ metabase_db_name }}"
+    postgres_version: 9.2
+    docker_ip: "{{ default_docker_ip }}"
+
+- name: Remove exited containers
+  become: yes
+  shell: docker rm $(docker ps -f 'status=exited' | grep 'metabase' | awk '{print $ 1}')
+  ignore_errors: true
+
+- name: Remove stopped containners
+  command: docker-compose -f {{ metabase_docker_compose_location }} rm
+  ignore_errors: true
+
+- name: Remove dangling images
+  become: yes
+  shell: docker rmi $(docker images -a | grep 'metabase' | awk '{print $ 3}')
+  ignore_errors: true
+
+- name: Create metabase docker conatainer
+  command: docker-compose -f {{ metabase_docker_compose_location }} up -d
