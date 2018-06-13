@@ -28,7 +28,7 @@
 - name: Create backup directory
   file:
     path: /data/analytics
-    mode: 0644
+    mode: 0666
     owner: "{{ bahmni_user }}"
     group: "{{ bahmni_group }}"
     state: directory
