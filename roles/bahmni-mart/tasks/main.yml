@@ -12,6 +12,11 @@
 - name: Install bahmni-mart using URL
   yum: name="{{ bahmni_mart_url }}" state=present
 
+- name: Set bahmni_mart_scdf_schema_name
+  set_fact:
+    bahmni_mart_scdf_schema_name: 'public'
+  when: groups['bahmni-mart-scdf'] is not defined or groups['bahmni-mart-scdf']|length == 0
+
 - name: Copy bahmni-mart config
   template:
     src=application.properties.j2
