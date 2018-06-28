@@ -37,3 +37,19 @@
     owner: "{{ bahmni_user }}"
     group: "{{ bahmni_group }}"
     state: directory
+
+- name: Copy bahmni-mart-backup script
+  template:
+    src=bahmni-mart-backup.sh.j2
+    dest=/opt/bahmni-mart/bin/bahmni-mart-backup.sh
+    mode=755
+    owner={{ bahmni_user }}
+    group={{ bahmni_group }}
+
+- name: Copy bahmni-mart-restore script
+  template:
+    src=bahmni-mart-restore.sh.j2
+    dest=/opt/bahmni-mart/bin/bahmni-mart-restore.sh
+    mode=755
+    owner={{ bahmni_user }}
+    group={{ bahmni_group }}
