@@ -1,0 +1,22 @@
+METABASE_DB_HOST={{ metabase_db_server }}
+METABASE_DB_USERNAME={{ metabase_db_user }}
+METABASE_DB_NAME={{ metabase_db_name }}
+POSTGRESQL_PORT={{ metabase_db_port }}
+
+OUTPUT_DATA_DIRECTORY=/data/metabase
+ACTUAL_FILE_NAME=metabase_$(date +"%Y%m%d%H%M")
+
+OUTPUT_FILE_NAME=${OUTPUT_DATA_DIRECTORY}/${ACTUAL_FILE_NAME}.dump
+
+echo "Creating encrypted backup file ${OUTPUT_FILE_NAME}"
+
+pg_dump -h ${METABASE_DB_HOST} -p ${POSTGRESQL_PORT} -U ${METABASE_DB_USERNAME} ${METABASE_DB_NAME} -c > ${OUTPUT_FILE_NAME}
+
+EXIT_CODE=$?
+
+if [ ${EXIT_CODE} == 0 ]; then
+    echo "Backup of ${METABASE_DB_NAME} is successfully completed";
+else
+    echo "Backup of ${METABASE_DB_NAME} is failed"
+    exit ${EXIT_CODE}
+fi
