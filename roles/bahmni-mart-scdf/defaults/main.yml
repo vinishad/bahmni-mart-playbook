@@ -14,7 +14,7 @@ analytics_db_user: analytics
 analytics_db_password: ''
 bahmni_mart_scdf_schema_name: bahmni_mart_scdf
 bahmni_mart_scdf_active_profile: docker
-liquibase_changelog_path: "/opt/bahmni-mart/conf/liquibase.xml"
+liquibase_changelog_path: "/opt/bahmni-mart/conf/bahmni-mart-scdf-liquibase.xml"
 
 dataflow_server_image: "springcloud/spring-cloud-dataflow-server-local:1.4.0.RELEASE"
 dataflow_server_port: 9393

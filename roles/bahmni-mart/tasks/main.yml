@@ -53,3 +53,19 @@
     mode=755
     owner={{ bahmni_user }}
     group={{ bahmni_group }}
+
+- name: Install Liquibase
+  yum:
+    name: liquibase
+    state: present
+
+- name: Get postgresSql jar
+  get_url:
+    url: "https://jdbc.postgresql.org/download/postgresql-42.2.2.jar"
+    dest: "{{ postgresql_jar_location }}"
+    mode: 644
+    owner: "{{ bahmni_user }}"
+    group: "{{ bahmni_group }}"
+
+- name: Run Liquibase migration
+  command: "liquibase --driver='org.postgresql.Driver' --classpath='{{ postgresql_jar_location }}/{{ postgresql_jar_name }}' --changeLogFile='{{ liquibase_changelog_path }}' --defaultSchemaName='public' --url=jdbc:postgresql://{{ analytics_db_server }}:{{ analytics_db_port }}/{{ analytics_db_name }} --username={{ analytics_db_user }} --password={{ analytics_db_password }} update"
