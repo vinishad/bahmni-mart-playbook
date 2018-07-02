@@ -16,7 +16,7 @@ bahmni_mart_scdf_schema_name: bahmni_mart_scdf
 bahmni_mart_scdf_active_profile: docker
 liquibase_changelog_path: "/opt/bahmni-mart/conf/bahmni-mart-scdf-liquibase.xml"
 
-dataflow_server_image: "springcloud/spring-cloud-dataflow-server-local:1.4.0.RELEASE"
+dataflow_server_image: "springcloud/spring-cloud-dataflow-server-local:1.5.1.RELEASE"
 dataflow_server_port: 9393
 bahmni_mart_properties_location: "/opt/bahmni-mart/properties/"
 postgresql_jar_name: "postgresql-42.2.2.jar"
