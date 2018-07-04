@@ -46,15 +46,22 @@
     db_name: "{{ metabase_db_name }}"
     postgres_version: 9.2
     docker_ip: "{{ default_docker_ip }}"
+    
+- name: Check if metabase container needs an update
+  shell: docker ps -a | grep 'metabase' | awk '{print $ 2}'
+  register: current_metabase_conatiner
+  ignore_errors: true
 
 - name: Remove exited containers
   become: yes
   shell: docker rm $(docker ps -f 'status=exited' | grep 'metabase' | awk '{print $ 1}')
   ignore_errors: true
+  when: passive is not defined or passive !='yes' or current_metabase_conatiner.stdout != "{{ metabase_docker_image }}"
 
 - name: Remove stopped containners
   command: docker-compose -f {{ metabase_docker_compose_location }} rm
   ignore_errors: true
+  when: passive is not defined or passive !='yes' or current_metabase_conatiner.stdout != "{{ metabase_docker_image }}"
 
 - name: Remove dangling images
   become: yes

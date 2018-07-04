@@ -55,14 +55,21 @@
     postgres_version: 9.2
     docker_ip: "{{ default_docker_ip }}"
 
+- name: Check if bahmni-mart-scdf container needs an update
+  shell: docker ps -a | grep 'springcloud' | awk '{print $ 2}'
+  register: current_scdf_conatiner
+  ignore_errors: true
+
 - name: Remove exited containers
   become: yes
   shell: docker rm $(docker ps -f 'status=exited' | grep 'springcloud' | awk '{print $ 1}')
   ignore_errors: true
+  when: passive is not defined or passive !='yes' or current_scdf_conatiner.stdout != "{{ dataflow_server_image }}"
 
 - name: Remove stopped containners
   command: docker-compose -f {{ bahmni_mart_scdf_docker_compose_location }} rm
   ignore_errors: true
+  when: passive is not defined or passive !='yes' or current_scdf_conatiner.stdout != "{{ dataflow_server_image }}"
 
 - name: Remove dangling images
   become: yes

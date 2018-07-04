@@ -10,5 +10,5 @@ metabase_db_type: postgres
 metabase_db_port: 5432
 metabase_db_server: "{{ groups['metabase-db'][0] | default(default_docker_ip, true) }}"
 metabase_docker_compose_location: "/opt/bahmni-mart/metabase-docker-compose.yml"
-metabase_docker_image: "metabase/metabase"
+metabase_docker_image: "metabase/metabase:v0.29.3"
 metabase_docker_container_name: metabase
