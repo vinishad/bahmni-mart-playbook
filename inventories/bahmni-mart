@@ -9,6 +9,8 @@ localhost
 [bahmni-mart-db]
 localhost
 
+[bahmni-mart-db-slave]
+
 [bahmni-mart-scdf]
 localhost
 
@@ -18,10 +20,15 @@ localhost
 [metabase-db]
 localhost
 
+[metabase-db-slave]
+
+
 [local:children]
 bahmni-mart
 bahmni-mart-db
+bahmni-mart-db-slave
 bahmni-mart-scdf
 bahmni-emr-db
 metabase
 metabase-db
+metabase-db-slave
