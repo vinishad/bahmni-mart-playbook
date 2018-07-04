@@ -63,3 +63,8 @@
 
 - name: Create metabase docker conatainer
   command: docker-compose -f {{ metabase_docker_compose_location }} up -d
+
+- name: Stop metabase docker conatainer on passive machine
+  command: docker-compose -f {{ metabase_docker_compose_location }} stop
+  when: passive is defined and passive=='yes'
+  ignore_errors: true
