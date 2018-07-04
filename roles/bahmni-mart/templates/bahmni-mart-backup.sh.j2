@@ -3,11 +3,7 @@
 ANALYTICS_DB_HOST={{ analytics_db_server }}
 ANALYTICS_DB_USERNAME={{ analytics_db_user }}
 ANALYTICS_DB_NAME={{ analytics_db_name }}
-POSTGRESQL_PORT=5432
-
-read -p "Enter recipient name(s) with comma(,) separation: " RECIPIENT_AS_CSV
-read -p "Enter DB backup format csv/sql. (Optional, default is 'sql'): " FORMAT
-
+POSTGRESQL_PORT={{ analytics_db_port }}
 OUTPUT_DATA_DIRECTORY=/data/analytics
 ACTUAL_FILE_NAME=analytics_$(date +"%Y%m%d%H%M")
 
@@ -15,7 +11,7 @@ BASE_OUTPUT_FILE_NAME=${OUTPUT_DATA_DIRECTORY}/${ACTUAL_FILE_NAME}
 RECIPIENTS=""
 
 print_info(){
-    echo "Creating encrypted backup file $1"
+    echo "Creating backup file $1"
 }
 
 export_as_csv(){
@@ -32,31 +28,48 @@ export_as_csv(){
     gpg ${RECIPIENTS} --always-trust --encrypt -o $1 ${ZIP_FILE_NAME} && rm -rf ${ZIP_FILE_NAME}
 }
 
-export_as_sql(){
+export_as_encrypted_sql(){
     print_info $1
 
     pg_dump -h ${ANALYTICS_DB_HOST} -p ${POSTGRESQL_PORT} -U ${ANALYTICS_DB_USERNAME} ${ANALYTICS_DB_NAME} -c | gpg ${RECIPIENTS} --always-trust --encrypt -o $1
 }
 
-echo
 
-if [ ! -z "$RECIPIENT_AS_CSV" ]; then
-    IFS=',' read -ra ADDR <<< "$RECIPIENT_AS_CSV"
-    for i in "${ADDR[@]}"; do
-        RECIPIENTS="$RECIPIENTS -r $i"
-    done
-else
-    echo "Please provide recipient name(s)"
-    exit 1;
-fi
+export_encrypted_db(){
+    read -p "Enter recipient name(s) with comma(,) separation: " RECIPIENT_AS_CSV
+    read -p "Enter DB backup format csv/sql. (Optional, default is 'sql'): " FORMAT
 
-if [ "${FORMAT,,}" = "csv" ]; then
-    export_as_csv ${BASE_OUTPUT_FILE_NAME}.gpg
-elif [[ "${FORMAT,,}" = "sql" || -z "$FORMAT" ]]; then
-    export_as_sql ${BASE_OUTPUT_FILE_NAME}.dump.gpg
-else
-    echo "Please provide proper format. For more info run 'bahmni-mart --help' "
-    exit 1;
+    echo
+
+    if [ ! -z "$RECIPIENT_AS_CSV" ]; then
+        IFS=',' read -ra ADDR <<< "$RECIPIENT_AS_CSV"
+        for i in "${ADDR[@]}"; do
+            RECIPIENTS="$RECIPIENTS -r $i"
+        done
+    else
+        echo "Please provide recipient name(s)"
+        exit 1;
+    fi
+
+    if [ "${FORMAT,,}" = "csv" ]; then
+        export_as_csv ${BASE_OUTPUT_FILE_NAME}.gpg
+    elif [[ "${FORMAT,,}" = "sql" || -z "$FORMAT" ]]; then
+        export_as_encrypted_sql ${BASE_OUTPUT_FILE_NAME}.dump.gpg
+    else
+        echo "Please provide proper format. For more info run 'bahmni-mart --help' "
+        exit 1;
+    fi
+}
+
+export_unencrypted_db(){
+    print_info ${BASE_OUTPUT_FILE_NAME}.dump
+    pg_dump -h ${ANALYTICS_DB_HOST} -p ${POSTGRESQL_PORT} -U ${ANALYTICS_DB_USERNAME} ${ANALYTICS_DB_NAME} -c > ${BASE_OUTPUT_FILE_NAME}.dump
+}
+
+if [[ -z $1 ]]; then
+    export_unencrypted_db;
+elif [[ "$1" == "-e" ]]; then
+    export_encrypted_db;
 fi
 
 EXIT_CODE=$?

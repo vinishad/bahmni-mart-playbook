@@ -3,7 +3,7 @@
 ANALYTICS_DB_HOST={{ analytics_db_server }}
 ANALYTICS_DB_USERNAME={{ analytics_db_user }}
 ANALYTICS_DB_NAME={{ analytics_db_name }}
-POSTGRESQL_PORT=5432
+POSTGRESQL_PORT={{ analytics_db_port }}
 
 read -p "Enter encrypted DB file location: " BACKUP_FILE_LOCATION
 
