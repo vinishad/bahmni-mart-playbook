@@ -1,0 +1,39 @@
+192.168.33.10 ansible_ssh_user=vagrant ansible_ssh_pass=vagrant
+192.168.33.11 ansible_ssh_user=vagrant ansible_ssh_pass=vagrant
+
+[bahmni-emr-db]
+192.168.33.10
+
+[bahmni-mart]
+192.168.33.10
+192.168.33.11 passive=yes
+
+[bahmni-mart-db]
+192.168.33.10
+
+[bahmni-mart-db-slave]
+192.168.33.11
+
+[bahmni-mart-scdf]
+192.168.33.10
+192.168.33.11 passive=yes
+
+[metabase]
+192.168.33.10
+192.168.33.11 passive=yes
+
+[metabase-db]
+192.168.33.10
+
+[metabase-db-slave]
+192.168.33.11
+
+[local:children]
+bahmni-mart
+bahmni-mart-db
+bahmni-mart-db-slave
+bahmni-mart-scdf
+bahmni-emr-db
+metabase
+metabase-db
+metabase-db-slave
