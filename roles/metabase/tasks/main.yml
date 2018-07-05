@@ -20,6 +20,7 @@
   postgresql_db:
     name: "{{ metabase_db_name }}"
     owner: "{{ metabase_db_user }}"
+  when: passive is not defined or passive !='yes'
 
 - name: Create backup directory
   file:
@@ -46,14 +47,25 @@
     group={{ bahmni_group }}
 
 - name: Update postgres config
-  include_role:
-    name: pg_hba
-  vars:
-    app_server_group: metabase
-    db_user: "{{ metabase_db_user }}"
-    db_name: "{{ metabase_db_name }}"
-    postgres_version: 9.2
-    docker_ip: "{{ default_docker_ip }}"
+  blockinfile:
+    dest: /var/lib/pgsql/{{ postgres_version }}/data/pg_hba.conf
+    marker: "#<!-- {mark} ANSIBLE MANAGED BLOCK metabase -->"
+    insertafter: "metabase"
+    state: present
+    block: |
+      host {{ metabase_db_name }} {{ metabase_db_user }} {{ default_docker_ip }}/16 trust #access through docker IP
+
+- name: Reload postgresql on active machine
+  service:
+    name=postgresql-{{ postgres_version }}
+    state=reloaded
+  when: "{{ inventory_hostname in groups['metabase-db'] }}"
+
+- name: Stop postgresql on passive machine
+  service:
+    name=postgresql-{{ postgres_version }}
+    state=stopped
+  when: "{{ inventory_hostname in groups['metabase-db-slave'] }}"
     
 - name: Check if metabase container needs an update
   shell: docker ps -a | grep 'metabase' | awk '{print $ 2}'

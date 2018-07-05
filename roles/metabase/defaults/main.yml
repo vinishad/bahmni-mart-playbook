@@ -12,3 +12,4 @@ metabase_db_server: "{{ groups['metabase-db'][0] | default(default_docker_ip, tr
 metabase_docker_compose_location: "/opt/bahmni-mart/metabase-docker-compose.yml"
 metabase_docker_image: "metabase/metabase:v0.29.3"
 metabase_docker_container_name: metabase
+postgres_version: 9.2

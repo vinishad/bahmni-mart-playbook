@@ -29,6 +29,7 @@
   postgresql_db:
     name: "{{ analytics_db_name }}"
     owner: "{{ analytics_db_user }}"
+  when: passive is not defined or passive !='yes'
     
 - name: Create backup directory
   file:
@@ -69,3 +70,4 @@
 
 - name: Run Liquibase migration
   command: "liquibase --driver='org.postgresql.Driver' --classpath='{{ postgresql_jar_location }}/{{ postgresql_jar_name }}' --changeLogFile='{{ liquibase_changelog_path }}' --defaultSchemaName='public' --url=jdbc:postgresql://{{ analytics_db_server }}:{{ analytics_db_port }}/{{ analytics_db_name }} --username={{ analytics_db_user }} --password={{ analytics_db_password }} update"
+  when: passive is not defined or passive !='yes'
