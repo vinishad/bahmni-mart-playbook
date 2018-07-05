@@ -5,7 +5,11 @@ ANALYTICS_DB_USERNAME={{ analytics_db_user }}
 ANALYTICS_DB_NAME={{ analytics_db_name }}
 POSTGRESQL_PORT={{ analytics_db_port }}
 
-read -p "Enter encrypted DB file location: " BACKUP_FILE_LOCATION
+if [[ -z $1 ]]; then
+    read -p "Enter DB file location: " BACKUP_FILE_LOCATION
+else
+    BACKUP_FILE_LOCATION=$1
+fi
 
 if [ -z "$BACKUP_FILE_LOCATION" ]; then
     echo "Please provide encrypted DB file location";

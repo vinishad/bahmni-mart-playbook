@@ -37,6 +37,14 @@
     owner={{ bahmni_user }}
     group={{ bahmni_group }}
 
+- name: Copy metabase restore script
+  template:
+    src=metabase-restore.sh.j2
+    dest=/opt/bahmni-mart/bin/metabase-restore.sh
+    mode=755
+    owner={{ bahmni_user }}
+    group={{ bahmni_group }}
+
 - name: Update postgres config
   include_role:
     name: pg_hba

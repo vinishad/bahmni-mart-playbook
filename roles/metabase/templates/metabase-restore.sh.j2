@@ -1,0 +1,30 @@
+#!/usr/bin/env bash
+METABASE_DB_HOST={{ metabase_db_server }}
+METABASE_DB_USERNAME={{ metabase_db_user }}
+METABASE_DB_NAME={{ metabase_db_name }}
+POSTGRESQL_PORT={{ metabase_db_port }}
+
+if [[ -z $1 ]]; then
+    read -p "Enter DB file location: " BACKUP_FILE_LOCATION
+else
+    BACKUP_FILE_LOCATION=$1
+fi
+
+if [ -z "$BACKUP_FILE_LOCATION" ]; then
+    echo "Please provide DB file location";
+    exit 1:
+fi
+
+echo "Restoring  ${METABASE_DB_NAME} with ${BACKUP_FILE_LOCATION}"
+
+psql -h ${METABASE_DB_HOST} -p ${POSTGRESQL_PORT} -U ${METABASE_DB_USERNAME} ${METABASE_DB_NAME} < ${BACKUP_FILE_LOCATION}
+
+EXIT_CODE=$?
+echo
+
+if [ ${EXIT_CODE} == 0 ]; then
+    echo "${METABASE_DB_NAME} restore is successfully completed";
+else
+    echo "${METABASE_DB_NAME} restore is failed"
+    exit ${EXIT_CODE}
+fi
