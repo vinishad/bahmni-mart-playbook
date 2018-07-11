@@ -91,6 +91,22 @@
 - name: Create metabase docker conatainer
   command: docker-compose -f {{ metabase_docker_compose_location }} up -d
 
+- block:
+
+    - name: Get matched IpTable rule
+      shell: iptables -nL --line-numbers | grep METABASE  -m 1 | cut -c 1-2
+      register: matchedRule
+
+    - name: delete matching rule if exists
+      shell: iptables -D INPUT {{ matchedRule.stdout }}
+      when: matchedRule.stdout!=""
+
+    - name: Allow openmrs port through firewall
+      command: /sbin/iptables -I INPUT 1 -p tcp --dport  {{ metabase_port }} -j ACCEPT -m comment --comment "METABASE"
+
+    - name: save iptables
+      command: service iptables save
+
 - name: Stop metabase docker conatainer on passive machine
   command: docker-compose -f {{ metabase_docker_compose_location }} stop
   when: passive is defined and passive=='yes'
