@@ -46,6 +46,22 @@
     owner={{ bahmni_user }}
     group={{ bahmni_group }}
 
+- block:
+
+    - name: Get matched IpTable rule
+      shell: iptables -nL --line-numbers | grep MART  -m 1 | cut -c 1-2
+      register: matchedRule
+
+    - name: delete matching rule if exists
+      shell: iptables -D INPUT {{ matchedRule.stdout }}
+      when: matchedRule.stdout!=""
+
+    - name: Allow openmrs port through firewall
+      command: /sbin/iptables -I INPUT 1 -p tcp --dport  {{ dataflow_server_port }} -j ACCEPT -m comment --comment "MART DATAFLOW SERVER"
+
+    - name: save iptables
+      command: service iptables save
+
 - name: Update postgres config
   blockinfile:
     dest: /var/lib/pgsql/{{ postgres_version }}/data/pg_hba.conf

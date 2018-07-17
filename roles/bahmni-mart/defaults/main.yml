@@ -11,7 +11,6 @@ analytics_db_name: analytics
 analytics_db_user: analytics
 analytics_db_password: ''
 analytics_db_port: 5432
-mart_port: 9393
 bahmni_mart_scdf_schema_name: bahmni_mart_scdf
 bahmni_mart_config_file: "/var/www/bahmni_config/bahmni-mart/bahmni-mart.json"
 default_app_config_file_path: "/var/www/bahmni_config/openmrs/apps/clinical/app.json"

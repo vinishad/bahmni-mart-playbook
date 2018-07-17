@@ -12,22 +12,6 @@
 - name: Install bahmni-mart using URL
   yum: name="{{ bahmni_mart_url }}" state=present
 
-- block:
-
-    - name: Get matched IpTable rule
-      shell: iptables -nL --line-numbers | grep MART  -m 1 | cut -c 1-2
-      register: matchedRule
-
-    - name: delete matching rule if exists
-      shell: iptables -D INPUT {{ matchedRule.stdout }}
-      when: matchedRule.stdout!=""
-
-    - name: Allow openmrs port through firewall
-      command: /sbin/iptables -I INPUT 1 -p tcp --dport  {{ mart_port }} -j ACCEPT -m comment --comment "MART"
-
-    - name: save iptables
-      command: service iptables save
-
 - name: Set bahmni_mart_scdf_schema_name
   set_fact:
     bahmni_mart_scdf_schema_name: 'public'
