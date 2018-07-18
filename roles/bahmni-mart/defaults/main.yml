@@ -21,6 +21,6 @@ bahmni_mart_log_path: "/opt/bahmni-mart/log/bahmni-mart.log"
 liquibase_changelog_path: "/opt/bahmni-mart/conf/liquibase.xml"
 postgresql_jar_name: "postgresql-42.2.2.jar"
 postgresql_jar_location: "/opt/bahmni-mart/lib"
-
-
-
+mail_subject: ''
+mail_from: ''
+mail_recipients: ''
