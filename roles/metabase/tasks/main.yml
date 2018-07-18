@@ -3,6 +3,22 @@
   include_role:
     name: docker
 
+- name: Copy metabase backup script
+  template:
+    src=metabase-backup.sh.j2
+    dest=/opt/bahmni-mart/bin/metabase-backup.sh
+    mode=755
+    owner={{ bahmni_user }}
+    group={{ bahmni_group }}
+
+- name: Copy metabase restore script
+  template:
+    src=metabase-restore.sh.j2
+    dest=/opt/bahmni-mart/bin/metabase-restore.sh
+    mode=755
+    owner={{ bahmni_user }}
+    group={{ bahmni_group }}
+
 - name: Set metabase_db_server variable
   set_fact:
     metabase_db_server: "{{ default_docker_ip }}"
@@ -29,22 +45,6 @@
     owner: "{{ bahmni_user }}"
     group: "{{ bahmni_group }}"
     state: directory
-
-- name: Copy metabase backup script
-  template:
-    src=metabase-backup.sh.j2
-    dest=/opt/bahmni-mart/bin/metabase-backup.sh
-    mode=755
-    owner={{ bahmni_user }}
-    group={{ bahmni_group }}
-
-- name: Copy metabase restore script
-  template:
-    src=metabase-restore.sh.j2
-    dest=/opt/bahmni-mart/bin/metabase-restore.sh
-    mode=755
-    owner={{ bahmni_user }}
-    group={{ bahmni_group }}
 
 - name: Update postgres config
   blockinfile:
