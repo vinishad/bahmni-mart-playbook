@@ -18,6 +18,7 @@ implementation_app_config_file_path: "/var/www/implementation_config/openmrs/app
 default_extension_config_file_path: "/var/www/bahmni_config/openmrs/apps/registration/extension.json"
 implementation_extension_config_file_path: "/var/www/implementation_config/openmrs/apps/registration/extension.json"
 bahmni_mart_log_path: "/opt/bahmni-mart/log/bahmni-mart.log"
+bahmni_mart_logback_xml_path: "/opt/bahmni-mart/properties/logback-spring.xml"
 liquibase_changelog_path: "/opt/bahmni-mart/conf/liquibase.xml"
 postgresql_jar_name: "postgresql-42.2.2.jar"
 postgresql_jar_location: "/opt/bahmni-mart/lib"

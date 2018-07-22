@@ -12,6 +12,14 @@
 - name: Install bahmni-mart using URL
   yum: name="{{ bahmni_mart_url }}" state=present
 
+- name: Copy logback.xml file
+  copy:
+    src: "{{ role_path }}/files/logback-spring.xml"
+    dest: "{{ bahmni_mart_logback_xml_path }}"
+    mode: "644"
+    owner: "{{ bahmni_user }}"
+    group: "{{ bahmni_group }}"
+
 - name: Set bahmni_mart_scdf_schema_name
   set_fact:
     bahmni_mart_scdf_schema_name: 'public'
