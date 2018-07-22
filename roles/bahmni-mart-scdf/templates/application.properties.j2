@@ -3,3 +3,4 @@ spring.ds_openmrs.url=jdbc:mysql://{{ openmrs_db_server }}/{{ openmrs_db_name }}
 batch.jdbc.url=jdbc:mysql://{{ openmrs_db_server }}/{{ openmrs_db_name }}
 spring.ds_mart.url=jdbc:postgresql://{{ analytics_db_server }}/{{ analytics_db_name }}
 spring.profiles.active={{ bahmni_mart_scdf_active_profile }}
+liquibase.url=jdbc:postgresql://{{ analytics_db_server }}/{{ analytics_db_name }}

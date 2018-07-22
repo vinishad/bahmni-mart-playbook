@@ -29,3 +29,10 @@ logging.config={{ bahmni_mart_logback_xml_path }}
 bahmni-mart.mail.subject={{ mail_subject }}
 bahmni-mart.mail.from={{ mail_from }}
 bahmni-mart.mail.recipients={{ mail_recipients }}
+
+#liquibase migration
+liquibase.change-log=file:{{ liquibase_changelog_path }}
+liquibase.enabled=true
+liquibase.url=jdbc:postgresql://{{ analytics_db_server }}/{{ analytics_db_name }}
+liquibase.user={{ analytics_db_user }}
+liquibase.password={{ analytics_db_password }}
