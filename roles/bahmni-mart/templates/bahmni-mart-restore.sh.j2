@@ -5,20 +5,23 @@ ANALYTICS_DB_USERNAME={{ analytics_db_user }}
 ANALYTICS_DB_NAME={{ analytics_db_name }}
 POSTGRESQL_PORT={{ analytics_db_port }}
 
-if [[ -z $1 ]]; then
-    read -p "Enter DB file location: " BACKUP_FILE_LOCATION
-else
-    BACKUP_FILE_LOCATION=$1
-fi
+BACKUP_FILE_LOCATION=$1;
 
-if [ -z "$BACKUP_FILE_LOCATION" ]; then
-    echo "Please provide encrypted DB file location";
-    exit 1:
-fi
+restore_encrypted_file(){
+    gpg --decrypt ${BACKUP_FILE_LOCATION} | psql -h ${ANALYTICS_DB_HOST} -p ${POSTGRESQL_PORT} -U ${ANALYTICS_DB_USERNAME} ${ANALYTICS_DB_NAME}
+}
+
+restore_unencrypted_file(){
+    psql -U ${ANALYTICS_DB_USERNAME} ${ANALYTICS_DB_NAME} < ${BACKUP_FILE_LOCATION}
+}
 
 echo "Restoring  ${ANALYTICS_DB_NAME} with ${BACKUP_FILE_LOCATION}"
 
-gpg --decrypt ${BACKUP_FILE_LOCATION} | psql -h ${ANALYTICS_DB_HOST} -p ${POSTGRESQL_PORT} -U ${ANALYTICS_DB_USERNAME} ${ANALYTICS_DB_NAME}
+if [ "$2" == "-e" ]; then
+    restore_encrypted_file;
+else
+    restore_unencrypted_file;
+fi
 
 EXIT_CODE=$?
 echo
