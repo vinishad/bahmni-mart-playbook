@@ -34,7 +34,6 @@
 
 - name: Create metabase DB User
   postgresql_user:
-    db: "{{ metabase_db_name }}"
     name: "{{ metabase_db_user }}"
     password: "{{ metabase_db_password }}"
 

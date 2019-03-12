@@ -35,7 +35,6 @@
 
 - name: Create bahmni-mart DB User
   postgresql_user:
-    db: "{{ analytics_db_name }}"
     name: "{{ analytics_db_user }}"
     password: "{{ analytics_db_password }}"
 
