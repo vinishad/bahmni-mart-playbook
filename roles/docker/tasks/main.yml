@@ -12,7 +12,7 @@
   when: docker_info.results|length != 0 and docker_info.results[0].version != "{{ docker_version }}"
 
 - name: Install docker
-  command: yum install -y http://get.docker.com/rpm/1.7.0/centos-6/RPMS/x86_64/docker-engine-1.7.0-1.el6.x86_64.rpm
+  command: yum install -y https://get.docker.com/rpm/1.7.1/centos-6/RPMS/x86_64/docker-engine-1.7.1-1.el6.x86_64.rpm
 
 - name: Evaluate docker compose url
   shell: "echo {{ docker_compose_url }}"
