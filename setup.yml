@@ -3,3 +3,7 @@ analytics_db_user: analytics
 metabase_db_user: metabase
 analytics_db_name: analytics
 metabase_db_name: metabase
+ANALYTICS_DB_PASSWORD: ''
+OPENMRS_DB_PASSWORD: password
+METABASE_DB_PASSWORD: pass
+metabase_db_password: pass

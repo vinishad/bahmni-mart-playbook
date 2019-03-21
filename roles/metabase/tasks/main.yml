@@ -112,7 +112,7 @@
       command: /sbin/iptables -I INPUT 1 -p tcp --dport  {{ metabase_port }} -j ACCEPT -m comment --comment "METABASE"
 
     - name: save iptables
-      command: service iptables save
+      command: /sbin/iptables-save
 
 - name: Stop metabase docker conatainer on passive machine
   command: docker-compose -f {{ metabase_docker_compose_location }} stop

@@ -105,7 +105,7 @@
       command: /sbin/iptables -I INPUT 1 -p tcp --dport  {{ dataflow_server_port }} -j ACCEPT -m comment --comment "MART DATAFLOW SERVER"
 
     - name: save iptables
-      command: service iptables save
+      command: /sbin/iptables-save
 
 - name: Stop bahmni-mart-scdf docker conatainer on passive machine
   command: docker-compose -f {{ bahmni_mart_scdf_docker_compose_location }} stop
