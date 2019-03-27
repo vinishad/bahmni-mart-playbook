@@ -1,6 +1,6 @@
 - name: insert/update postgres config after lab_postgres line
   blockinfile:
-    dest: {{ postgresql_data_dir }}/{{ postgres_version }}/data/pg_hba.conf
+    dest: "{{ postgresql_data_dir }}/{{ postgres_version }}/data/pg_hba.conf"
     marker: "#<!-- {mark} ANSIBLE MANAGED BLOCK {{app_server_group}} -->"
     insertafter: "{{ app_server_group }}"
     state: present
