@@ -21,4 +21,4 @@ dataflow_server_port: 9393
 bahmni_mart_properties_location: "/opt/bahmni-mart/properties/"
 postgresql_jar_name: "postgresql-42.2.2.jar"
 postgresql_jar_location: "/opt/bahmni-mart/lib"
-postgres_version: 9.2
+postgres_version: 9.6

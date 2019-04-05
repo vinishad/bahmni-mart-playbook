@@ -21,7 +21,7 @@
   register: pgdata_dir_version
 
 - name: Initiate database
-  command: /usr/pgsql-"{{ postgres_version }}"/bin/postgresql92-setup initdb
+  command: /usr/pgsql-"{{ postgres_version }}"/bin/postgresql96-setup initdb
   when: not pgdata_dir_version.stat.exists
 
 - name: Copy postgresql conf
