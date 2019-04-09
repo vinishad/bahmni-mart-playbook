@@ -4,6 +4,6 @@ metabase_db_user: metabase
 analytics_db_name: analytics
 metabase_db_name: metabase
 ANALYTICS_DB_PASSWORD: ''
-OPENMRS_DB_PASSWORD: password
+OPENMRS_DB_PASSWORD: P@ssw0rd
 METABASE_DB_PASSWORD: pass
 metabase_db_password: pass
